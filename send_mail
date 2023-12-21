@@ -1,0 +1,32 @@
+# thư viện gửi email
+import smtplib
+from email.message import EmailMessage
+
+SOURCE_EMAIL = 'nl142857nl@outlook.com.vn'
+PASSWORD = '@nl142857D1019'
+destination_email = 'rinnmusic2.2@gmail.com'
+mailServer = 'smtp.office365.com'  # input: microsoft là smtp.office365.com ; google là smtp.gmail.com
+mailPort = 587 # microsort = 587, google 587 (bảo mật TLS - Transport Layer Security), 465 (SSL - Secure Socket Layer)
+
+
+SUBJECT_EMAIL = "Tiêu đề: Lập trình mạng"
+BODY_EMAIL = "Thân gửi bạn Long,\n\nNội dung thư điện tử.\n\nTrân trọng."
+
+email = EmailMessage()
+email['To'] = destination_email
+email['From'] = SOURCE_EMAIL
+email['Subject'] = SUBJECT_EMAIL
+email.set_content(BODY_EMAIL)
+
+with open(file='test.txt', mode='rb') as f:
+    data = f.read()
+    email.add_attachment(data, maintype='text', subtype='plain', filename=f.name)
+
+connection = smtplib.SMTP(host=mailServer, port=mailPort)
+connection.starttls()
+connection.login(SOURCE_EMAIL, PASSWORD)
+connection.send_message(from_addr=SOURCE_EMAIL, to_addrs=destination_email, msg=email) # nếu có đính kèm file thì có thể dùng tham số add_attachment()
+connection.quit()
+
+
+  
